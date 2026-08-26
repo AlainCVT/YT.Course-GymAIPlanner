@@ -1,0 +1,67 @@
+@import 'tailwindcss';
+@import '@neondatabase/neon-js/ui/tailwind';
+
+@theme {
+  --font-sans: 'Geist', system-ui, sans-serif;
+
+  --color-background: oklch(14.479% 0.00002 271.152);
+  --color-foreground: oklch(98.511% 0.00011 271.152);
+  --color-card: oklch(21.033% 0.00588 285.832);
+  --color-card-foreground: oklch(98.511% 0.00011 271.152);
+  --color-primary: oklch(84.932% 0.2073 128.868);
+  --color-primary-foreground: oklch(14.479% 0.00002 271.152);
+  --color-secondary: oklch(27.394% 0.00551 285.955);
+  --color-secondary-foreground: oklch(98.511% 0.00011 271.152);
+  --color-muted: oklch(71.182% 0.01302 285.981);
+  --color-muted-foreground: oklch(71.182% 0.01302 285.981);
+  --color-accent: oklch(84.932% 0.2073 128.868);
+  --color-accent-foreground: oklch(14.479% 0.00002 271.152);
+  --color-accent-hover: oklch(76.815% 0.20437 130.867);
+  --color-border: oklch(27.394% 0.00551 285.955);
+  --color-input: oklch(27.394% 0.00551 285.955);
+  --color-ring: oklch(84.932% 0.2073 128.868);
+}
+
+@layer base {
+  :root {
+    --background: var(--color-background);
+    --foreground: var(--color-foreground);
+    --card: var(--color-card);
+    --card-foreground: var(--color-card-foreground);
+    --primary: var(--color-primary);
+    --primary-foreground: var(--color-primary-foreground);
+    --secondary: var(--color-secondary);
+    --secondary-foreground: var(--color-secondary-foreground);
+    --muted: var(--color-muted);
+    --muted-foreground: var(--color-muted-foreground);
+    --accent: var(--color-accent);
+    --accent-foreground: var(--color-accent-foreground);
+    --accent-hover: var(--color-accent-hover);
+    --border: var(--color-border);
+    --input: var(--color-input);
+    --ring: var(--color-ring);
+  }
+
+  html {
+    font-family: var(--font-sans);
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  :is(a, button):not([disabled]) {
+    cursor: pointer;
+  }
+
+  /* Override Better Auth skeleton colors */
+  [data-slot='skeleton'],
+  .animate-pulse {
+    background-color: var(--color-border) !important;
+  }
+}
