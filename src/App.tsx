@@ -1,6 +1,7 @@
 import { NeonAuthUIProvider } from '@neondatabase/neon-js/auth/react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
+import { Navbar } from '@/components/layouts/Navbar';
 import { authClient } from '@/lib/auth';
 import Account from '@/pages/Account';
 import Auth from '@/pages/Auth';
@@ -14,6 +15,7 @@ function App() {
       <BrowserRouter>
         <div className="min-h-screen flex flex-col">
           <main className="flex-1">
+            <Navbar />
             <Routes>
               <Route index element={<Home />} />
               <Route path="/onboarding" element={<Onboarding />} />
