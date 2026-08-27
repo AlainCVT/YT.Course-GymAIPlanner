@@ -5,12 +5,14 @@ import { authClient } from '@/lib/auth';
 
 interface AuthContextType {
   user: NeonUser | null;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState<NeonUser | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function loadUser() {
@@ -23,13 +25,15 @@ export function AuthProvider({ children }: PropsWithChildren) {
         }
       } catch {
         setUser(null);
+      } finally {
+        setIsLoading(false);
       }
     }
 
     loadUser();
   }, []);
 
-  return <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, isLoading }}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => {

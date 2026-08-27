@@ -55,6 +55,11 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  *::selection {
+    background-color: color-mix(in oklab, var(--color-accent) 60%, transparent);
+    color: var(--color-foreground);
+  }
+
   :is(a, button):not([disabled]) {
     cursor: pointer;
   }
