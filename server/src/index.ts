@@ -3,8 +3,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 
-import { planRouter } from './routes/plan';
-import { profileRouter } from './routes/profile';
+import { planRouter } from './routes/plan.routes';
+import { profileRouter } from './routes/profile.routes';
 
 dotenv.config();
 
