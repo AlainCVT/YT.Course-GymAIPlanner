@@ -117,10 +117,11 @@ export default function Onboarding() {
             <form onSubmit={handleQuestionnaire} className="grid grid-cols-2 gap-5">
               {Object.entries(ONBOARDING_OPTIONS).map(([id, data]) => (
                 <Select
+                  key={id}
                   id={id}
                   label={data.label}
                   options={data.options}
-                  value={formData.goal}
+                  value={formData[id]}
                   onValueChange={(value) => updateForm(id, value)}
                 />
               ))}

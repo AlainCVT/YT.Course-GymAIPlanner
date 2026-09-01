@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { type ChangeEventHandler, forwardRef, type SelectHTMLAttributes } from 'react';
 
-export interface SelectOption<T extends string | number> {
+export interface SelectOption<T extends string | number = string | number> {
   value: T;
   label: string;
 }
