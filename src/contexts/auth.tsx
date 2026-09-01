@@ -1,11 +1,14 @@
 import type { User as NeonUser } from '@neondatabase/neon-js/auth/types';
 import { createContext, type PropsWithChildren, useContext, useEffect, useState } from 'react';
 
+import { api } from '@/lib/api';
 import { authClient } from '@/lib/auth';
+import type { Profile } from '@/types';
 
 interface AuthContextType {
   user: NeonUser | null;
   isLoading: boolean;
+  saveProfile: (profile: Profile) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -33,7 +36,17 @@ export function AuthProvider({ children }: PropsWithChildren) {
     loadUser();
   }, []);
 
-  return <AuthContext.Provider value={{ user, isLoading }}>{children}</AuthContext.Provider>;
+  const saveProfile = async (profile: Profile) => {
+    if (!user) {
+      throw new Error('User must be authenticated to save profile');
+    }
+
+    await api.saveProfile(user.id, profile);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, isLoading, saveProfile }}>{children}</AuthContext.Provider>
+  );
 }
 
 export const useAuth = () => {

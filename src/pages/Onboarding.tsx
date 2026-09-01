@@ -7,6 +7,14 @@ import { Card } from '@/components/ui/Card';
 import { Select, type SelectOption } from '@/components/ui/Select';
 import { Textarea } from '@/components/ui/Textarea';
 import { useAuth } from '@/contexts/auth';
+import type { Profile } from '@/types';
+
+type OnboardingOptions = {
+  [K in keyof Omit<Profile, 'injuries'>]: {
+    label: string;
+    options: SelectOption<Profile[K]>[];
+  };
+};
 
 const ONBOARDING_OPTIONS = {
   goal: {
@@ -30,20 +38,20 @@ const ONBOARDING_OPTIONS = {
   daysPerWeek: {
     label: 'Days per week',
     options: [
-      { value: '2', label: '2 days per week' },
-      { value: '3', label: '3 days per week' },
-      { value: '4', label: '4 days per week' },
-      { value: '5', label: '5 days per week' },
-      { value: '6', label: '6 days per week' },
+      { value: 2, label: '2 days per week' },
+      { value: 3, label: '3 days per week' },
+      { value: 4, label: '4 days per week' },
+      { value: 5, label: '5 days per week' },
+      { value: 6, label: '6 days per week' },
     ],
   },
   sessionLength: {
     label: 'Session length',
     options: [
-      { value: '30', label: '30 minutes' },
-      { value: '45', label: '45 minutes' },
-      { value: '60', label: '60 minutes' },
-      { value: '90', label: '90 minutes' },
+      { value: 30, label: '30 minutes' },
+      { value: 45, label: '45 minutes' },
+      { value: 60, label: '60 minutes' },
+      { value: 90, label: '90 minutes' },
     ],
   },
   equipment: {
@@ -63,30 +71,16 @@ const ONBOARDING_OPTIONS = {
       { value: 'custom', label: 'Let AI Decide' },
     ],
   },
-} as const satisfies Record<
-  string,
-  {
-    label: string;
-    options: SelectOption<string>[];
-  }
->;
-
-type OnboardingFormData = {
-  [
-    key in keyof typeof ONBOARDING_OPTIONS
-  ]: (typeof ONBOARDING_OPTIONS)[key]['options'][number]['value'];
-} & {
-  injuries: string;
-};
+} as const satisfies OnboardingOptions;
 
 export default function Onboarding() {
-  const { user } = useAuth();
+  const { user, saveProfile } = useAuth();
 
-  const [formData, setFormData] = useState<OnboardingFormData>({
+  const [formData, setFormData] = useState<Required<Profile>>({
     goal: 'bulk',
     experience: 'intermediate',
-    daysPerWeek: '4',
-    sessionLength: '60',
+    daysPerWeek: 4,
+    sessionLength: 60,
     equipment: 'full_gym',
     preferredSplit: 'upper_lower',
     injuries: '',
@@ -98,12 +92,10 @@ export default function Onboarding() {
 
   const handleQuestionnaire = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+    saveProfile(formData);
   };
 
-  const updateForm = <T extends keyof OnboardingFormData>(
-    field: T,
-    value: OnboardingFormData[T],
-  ) => {
+  const updateForm = <T extends keyof Profile>(field: T, value: Profile[T]) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
