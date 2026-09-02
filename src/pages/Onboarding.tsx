@@ -1,6 +1,7 @@
 import { RedirectToSignIn, SignedIn } from '@neondatabase/neon-js/auth/react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Loader2 } from 'lucide-react';
 import { type SubmitEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -74,8 +75,12 @@ const ONBOARDING_OPTIONS = {
 } as const satisfies OnboardingOptions;
 
 export default function Onboarding() {
-  const { user, saveProfile } = useAuth();
+  const { user, saveProfile, generatePlan } = useAuth();
 
+  const navigate = useNavigate();
+
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
   const [formData, setFormData] = useState<Required<Profile>>({
     goal: 'bulk',
     experience: 'intermediate',
@@ -92,7 +97,17 @@ export default function Onboarding() {
 
   const handleQuestionnaire = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    saveProfile(formData);
+
+    try {
+      await saveProfile(formData);
+      setIsGenerating(true);
+      await generatePlan();
+      navigate('/profile');
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Failed to save profile.');
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const updateForm = <T extends keyof Profile>(field: T, value: Profile[T]) => {
@@ -103,34 +118,47 @@ export default function Onboarding() {
     <SignedIn>
       <div className="min-h-screen pt-24 pb-12 px-6">
         <div className="max-w-xl mx-auto">
-          <Card variant="bordered">
-            <h1 className="text-2xl font-bold mb-2">Tell us about yourself</h1>
-            <p className="text-muted mb-6">Help us create the perfect plan for you</p>
-            <form onSubmit={handleQuestionnaire} className="grid grid-cols-2 gap-5">
-              {Object.entries(ONBOARDING_OPTIONS).map(([id, data]) => (
-                <Select
-                  key={id}
-                  id={id}
-                  label={data.label}
-                  options={data.options}
-                  value={formData[id]}
-                  onValueChange={(value) => updateForm(id, value)}
+          {error ? (
+            <Card variant="bordered">
+              <h1 className="text-2xl font-bold mb-2">Something went wrong</h1>
+              <p className="text-muted">{error}</p>
+            </Card>
+          ) : !isGenerating ? (
+            <Card variant="bordered">
+              <h1 className="text-2xl font-bold mb-2">Tell us about yourself</h1>
+              <p className="text-muted mb-6">Help us create the perfect plan for you</p>
+              <form onSubmit={handleQuestionnaire} className="grid grid-cols-2 gap-5">
+                {Object.entries(ONBOARDING_OPTIONS).map(([id, data]) => (
+                  <Select
+                    key={id}
+                    id={id}
+                    label={data.label}
+                    options={data.options}
+                    value={formData[id]}
+                    onValueChange={(value) => updateForm(id, value)}
+                  />
+                ))}
+                <Textarea
+                  id="injuries"
+                  className="col-span-full"
+                  label="Any injuries or limitations? (optional)"
+                  placeholder="E.g., lower back issues, shoulder impingement…"
+                  rows={3}
+                  value={formData.injuries}
+                  onChange={(event) => updateForm('injuries', event.target.value)}
                 />
-              ))}
-              <Textarea
-                id="injuries"
-                className="col-span-full"
-                label="Any injuries or limitations? (optional)"
-                placeholder="E.g., lower back issues, shoulder impingement…"
-                rows={3}
-                value={formData.injuries}
-                onChange={(event) => updateForm('injuries', event.target.value)}
-              />
-              <Button type="submit" className="flex-1 mt-2 gap-2 col-span-full">
-                Generate My Plan <ArrowRight className="size-4" />
-              </Button>
-            </form>
-          </Card>
+                <Button type="submit" className="flex-1 mt-2 gap-2 col-span-full">
+                  Generate My Plan <ArrowRight className="size-4" />
+                </Button>
+              </form>
+            </Card>
+          ) : (
+            <Card variant="bordered" className="text-center py-16">
+              <Loader2 className="size-12 text-accent mx-auto mb-6 animate-spin" />
+              <h1 className="text-2xl font-bold mb-2">Creating your Plan</h1>
+              <p className="text-muted">Our AI is building your personalized training program…</p>
+            </Card>
+          )}
         </div>
       </div>
     </SignedIn>

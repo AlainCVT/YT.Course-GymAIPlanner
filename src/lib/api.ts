@@ -22,4 +22,10 @@ export const api = {
   saveProfile: async (userId: UserProfile['userId'], profile: Profile) => {
     return post<{ success: boolean }>('/profile', { userId, ...profile });
   },
+  generatePlan: async (userId: UserProfile['userId']) => {
+    return post<{ success: boolean; id: string; version: number; createdAt: string }>(
+      '/plan/generate',
+      { userId },
+    );
+  },
 };
