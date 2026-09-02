@@ -12,14 +12,52 @@ datasource db {
   provider = "postgresql"
 }
 
+model TrainingPlans {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String   @db.Uuid
+  plan_json  Json
+  plan_text  String
+  version    Int      @default(1)
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([user_id], map: "idx_training_plans_user_id")
+}
+
 model UserProfiles {
-  user_id         String   @id @db.Uuid
-  goal            String   @db.VarChar(20)
-  experience      String   @db.VarChar(20)
+  user_id         String         @id @db.Uuid
+  goal            Goal
+  experience      Experience
   days_per_week   Int
   session_length  Int
-  equipment       String   @db.VarChar(20)
-  preferred_split String   @db.VarChar(20)
+  equipment       Equipment
+  preferred_split PreferredSplit
   injuries        String?
-  updated_at      DateTime @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime       @default(now()) @db.Timestamptz(6)
+}
+
+enum Goal {
+  cut
+  bulk
+  recomp
+  strength
+  endurance
+}
+
+enum Experience {
+  beginner
+  intermediate
+  advanced
+}
+
+enum Equipment {
+  full_gym
+  home
+  dumbbells
+}
+
+enum PreferredSplit {
+  full_body
+  upper_lower
+  ppl
+  custom
 }
