@@ -38,7 +38,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   const saveProfile = async (profile: Profile) => {
     if (!user) {
-      throw new Error('User must be authenticated to save profile');
+      throw new Error('User must be authenticated to save profile.');
     }
 
     await api.saveProfile(user.id, profile);
@@ -53,7 +53,7 @@ export const useAuth = () => {
   const context = useContext(AuthContext);
 
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error('useAuth must be used within an AuthProvider.');
   }
 
   return context;

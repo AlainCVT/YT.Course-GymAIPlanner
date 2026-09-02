@@ -20,11 +20,11 @@ profileRouter.post('/', validateMiddleware(userProfilesSchema), async (req, res)
     } = req.body as UserProfilesRequest;
 
     if (!userId) {
-      return res.status(400).json({ error: 'User ID is required' });
+      return res.status(400).json({ error: 'User ID is required.' });
     }
 
     if (!goal || !experience || !daysPerWeek || !sessionLength || !equipment || !preferredSplit) {
-      return res.status(400).json({ error: 'Missing required fields' });
+      return res.status(400).json({ error: 'Missing required fields.' });
     }
 
     await prisma.userProfiles.upsert({
@@ -54,6 +54,6 @@ profileRouter.post('/', validateMiddleware(userProfilesSchema), async (req, res)
     res.json({ success: true });
   } catch (error) {
     console.error('Error saving profile:', error);
-    res.status(500).json({ error: 'Failed to save profile' });
+    res.status(500).json({ error: 'Failed to save profile.' });
   }
 });
