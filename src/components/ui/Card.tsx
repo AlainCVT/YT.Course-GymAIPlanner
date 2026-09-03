@@ -3,16 +3,25 @@ import { forwardRef, type HTMLAttributes } from 'react';
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
   variant?: 'default' | 'bordered';
+  theme?: 'primary';
 }
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
-  ({ className, variant = 'default', children, ...props }, ref) => {
+  ({ className, variant = 'default', theme, children, ...props }, ref) => {
     return (
       <div
         ref={ref}
-        className={clsx(className, 'rounded-2xl p-6 bg-card', {
-          'border border-border': variant === 'bordered',
-        })}
+        className={clsx(
+          className,
+          'rounded-2xl p-6',
+          {
+            border: variant === 'bordered',
+          },
+          {
+            'bg-card border-border': !theme,
+            'bg-primary/5 border-primary/20!': theme === 'primary',
+          },
+        )}
         {...props}
       >
         {children}

@@ -1,4 +1,4 @@
-import type { Profile, UserProfile } from '@/types';
+import type { Profile, TrainingPlanData, UserProfile } from '@/types';
 
 const API_URL = import.meta.env.VITE_API_URL as string;
 
@@ -18,6 +18,14 @@ async function post<T>(path: `/${string}`, body: object) {
   return res.json() as T;
 }
 
+async function get<T>(path: `/${string}`) {
+  const res = await fetch(`${API_URL}/api${path}`);
+
+  if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || 'Request failed');
+
+  return res.json() as T;
+}
+
 export const api = {
   saveProfile: async (userId: UserProfile['userId'], profile: Profile) => {
     return post<{ success: boolean }>('/profile', { userId, ...profile });
@@ -27,5 +35,15 @@ export const api = {
       '/plan/generate',
       { userId },
     );
+  },
+  getCurrentPlan: async (userId: UserProfile['userId']) => {
+    return get<{
+      id: string;
+      userId: string;
+      planJson: TrainingPlanData;
+      planText: string;
+      version: number;
+      createdAt: string;
+    }>(`/plan/current?userId=${userId}`);
   },
 };
