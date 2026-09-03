@@ -15,7 +15,7 @@ export const Navbar = () => {
           <Dumbbell className="size-6 text-accent" />
           <span className="font-semibold text-lg">GymAI</span>
         </Link>
-        <nav>
+        <nav className="flex gap-6 items-center">
           {user ? (
             <>
               <Link to="/profile">
