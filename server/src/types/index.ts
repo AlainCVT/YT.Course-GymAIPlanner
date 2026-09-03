@@ -2,7 +2,7 @@ import { UserProfiles } from '@/generated/prisma/client';
 
 export type UserProfileData = Omit<UserProfiles, 'user_id' | 'updated_at'>;
 
-export interface PlanOverview {
+interface PlanOverview {
   goal: string;
   frequency: string;
   split: string;

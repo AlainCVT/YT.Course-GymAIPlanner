@@ -125,7 +125,7 @@ export default function Onboarding() {
             </Card>
           ) : !isGenerating ? (
             <Card variant="bordered">
-              <h1 className="text-2xl font-bold mb-2">Tell us about yourself</h1>
+              <h1 className="text-2xl font-bold mb-2">Tell Us About Yourself</h1>
               <p className="text-muted mb-6">Help us create the perfect plan for you</p>
               <form onSubmit={handleQuestionnaire} className="grid grid-cols-2 gap-5">
                 {Object.entries(ONBOARDING_OPTIONS).map(([id, data]) => (

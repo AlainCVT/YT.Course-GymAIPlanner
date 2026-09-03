@@ -20,7 +20,7 @@ export const Navbar = () => {
             <>
               <Link to="/profile">
                 <Button variant="ghost" size="sm">
-                  My plan
+                  My Plan
                 </Button>
               </Link>
               <UserButton />
