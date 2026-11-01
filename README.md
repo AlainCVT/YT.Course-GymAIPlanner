@@ -142,4 +142,4 @@ The Express API is mounted under `/api`:
 
 ## Credits
 
-https://www.youtube.com/watch?v=upo7BBbomoQ
+[PERN Full Course 2026 | React, NodeJS, Express, PostgreSQL...](https://www.youtube.com/watch?v=upo7BBbomoQ)
